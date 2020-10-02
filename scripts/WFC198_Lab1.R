@@ -31,13 +31,18 @@
 
 # Let's get started!
 
+## why R? why coding?
 ## r is a language, so there is a syntax or set of rules for the language
-## need to intoduce classes of variables: numeric, integer, factor, character AND class command
-## need to introduce types of data: variable, vector, dataframe, list and class command
+## need to intoduce classes of data/variables: numeric, integer, factor, character AND class command
+## need to introduce types of data: variable, vector, dataframe; list and class command
+## explain factor vs character, discrete vs contiunous strings. df vs tibbles. 
+## what a df is: columns are variables and rows are observations
 ## <- vs = in syntax
 ## naming variables/objects
 ## names()
 ## how to trouble shoot in R
+## == as boolean and == with commands like filter and select
+## show them how to view, navigate Rstudio GUI
 
 #-------------------------#
 #### FUNDAMENTAL SYNTAX ####
@@ -47,7 +52,7 @@
 
 # R can function directly as a calculator. 
 # Try running the next line by placing your cursor anywhere on the line and pressing command-return
-## Note apple computers use a different command
+## Note apple computers use a different command????
 2 + 3
 
 # An arrow is used to name objects. Run the code below in the console
@@ -56,10 +61,17 @@ my_object <- 2 + 4
 # To see what is in your named object, you can call it by typing it into to console
 my_object
 
+class(my_object)
+
 # In the above case, your object is simply a single value.
 # But objects can take many forms! Some common ones that we will use are vectors and dataframes
 # A vector is a string of numbers. You can make a vector by using the c() function to combine numbers into a vector
 c(1,3,6)
+
+a <- c(1,3,6) 
+
+b <- c("nina", "billy", "ella")
+
 
 # Notice that any time we open parentheses, we have to close them!
 
@@ -71,6 +83,9 @@ c(1,3,6)
 my_dataframe <- data.frame("columnA" = c(1,3,5), "letters" = c("A","B","A"))
 my_dataframe
 
+habitat<- data.frame("species" = c("skunk", "fox", "mouse"), "grass" = c(1, 40, 20), "shrub" = c(25, 15, 30))
+habitat
+
 # Note that we had to put the letters in quotes. 
 # R can't understand words or letters (i.e. "characters") without quotes.
 # Try running each of the next two lines of code. Which one gives you an error message?
@@ -78,11 +93,11 @@ Hello world
 "Hello world"
 
 # Another important symbol is $. The $ symbol can be used to isolate a column of a dataframe
-my_dataframe$column.A
+my_dataframe$columnA
 ## typo
 
 # Let's use the $ symbol to make a new column in our dataframe that doubles the values in column.A
-my_dataframe$newcolumn <- my_dataframe$column.A * 2
+my_dataframe$newcolumn <- my_dataframe$columnA * 2
 my_dataframe
 
 # Another way to isolate a column, row, or cell is to use brackets. 
@@ -119,7 +134,7 @@ my_object == 5
 #----------------------#
 #### DATA STRUCTURE ####
 
-install.packages("palmerpenguins")
+#install.packages("palmerpenguins")
 library(palmerpenguins)
 
 # We will use the penguins dataset from package "palmerpenguins" to practice exploring data
@@ -134,7 +149,8 @@ class(penguins)
 # We will mostly be coding using tidyverse syntax in this class
 # To fully work with tibbles, we need to install the tidyverse package
 
-install.packages("tidyverse", dependencies = TRUE)
+#install.packages("tidyverse", dependencies = TRUE)
+
 library(tidyverse)
 # Loading library "tidyverse" will load the core packages in the tidyverse
 # Some of these packages are:
@@ -316,7 +332,7 @@ summarize(penguins, mean_bill_depth = mean(bill_depth_mm))
 ## explain that mean_bill_depth is a new "column"?
 
 # We can also use summarize to look at summary info by a factor
-## explain factor here?
+## explain factor here? its explained early. in my explanation, factors have levels, characters don't. 
 str(penguins)
 # To do this, we have to group our data by a factor
 # Here, we are grouping our data by species
@@ -330,7 +346,7 @@ summarize(group_by(penguins,year),
           max_bill_depth = max(bill_depth_mm),
           min_bill_depth = min(bill_depth_mm)) -> penguin_year_summary
 penguin_year_summary
-## different order of assigned variable, is that confusing?
+## different order of assigned object, is that confusing?
 
 # *Your turn!* Summarize our penguin dataset, grouped by island, and calculate the mean and 
 #   standard deviation of body mass

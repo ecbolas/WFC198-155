@@ -21,10 +21,14 @@ install.packages("RColorBrewer",dependencies=T)
 ##find.package("RColorBrewer")
 # Ok, let's get to piping!
 
-
+## how to read a plot and the differences between plots. dependent vs independent. x axis vs y. why is time always on the x axis. then put up examples of scatter is individual observations, box shows mdeian and quantiles, and bar plots are summaries. 
+## if time/interest talk about color palettes- temperature is divergent color palett. if increases then use continuous. different individuals = discrete color pallete. the way we use color isn't random, it conveys meaning. 
 ## zoom in plot window
 ## continuous and categorical variables
 ## ggplot cheat sheet
+## reminder of == as boolean and == w/ filter
+## double-check when object<- commands vs commands -> object
+## clarify factor vs. variable
 
 #--------------#
 #### PIPING ####
@@ -168,6 +172,8 @@ penguins %>%
 
 #--------------------------#
 #### DATA VISUALIZATION ####
+##
+library(RColorBrewer)
 
 # We will primarily use 'ggplot' (in the tidyverse) to make vizualizations
 # ggplot allows for easy customization of plots by adding individual commands (like pipes)
@@ -224,6 +230,7 @@ ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, colo
 # You will need this image to insert into your lab write-up
 
 # In addition to color, we can also distinguish a factor by size...
+## note that earlier, variable is used, now "factor" is used
 ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, size = species)) + 
   geom_point()
 ## talk about warning message
@@ -374,6 +381,10 @@ ggplot(data = penguins, aes(x = body_mass_g, y = flipper_length_mm, color = spec
 
 # Sure, we can see the colors for the different species, but the color scheme implies that
 #   the species represent a gradient of some kind. That's not what we intended to show.
+
+ggplot(data = penguins, aes(x = body_mass_g, y = flipper_length_mm, color = body_mass_g)) + 
+  geom_point() +
+  scale_color_brewer(palette = "OrRd")
 
 # However, sequential color schemes are great for showing continuous data
 # Let's see how bill length predicts flipper length:
