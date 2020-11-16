@@ -1,0 +1,16 @@
+ID,landcover,colortable
+1,Open Water,#466B9F
+2,"Developed, Open Space",#D1DEF8
+3,"Developed, Low Intensity",#DEC5C5
+4,"Developed, Medium Intensity",#D99282
+5,"Developed, High Intensity",#EB0000
+6,Barren Land,#AB0000
+7,Deciduous Forest,#B3AC9F
+8,Evergreen Forest,#68AB5F
+9,Mixed Forest,#1C5F2C
+10,Shrub/Scrub,#B5C58F
+11,Herbaceuous,#CCB879
+12,Hay/Pasture,#DFDFC2
+13,Cultivated Crops,#DCD939
+14,Woody Wetlands,#AB6C28
+15,Emergent Herbaceuous Wetlands,#6C9FB8

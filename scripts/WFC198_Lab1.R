@@ -17,7 +17,6 @@
 #   browser, plots, and console.
 # The source panel (this one) is where you draft your code
 # The console (below this one) is where you run your code
-## where R runs the code and outputs information
 # The workplace environment (to the right) keeps track of your saved objects 
 # The plot panel (bottom right) shows your plots, and also can be used to look for packages
 #   and access R help
@@ -31,19 +30,6 @@
 
 # Let's get started!
 
-## why R? why coding?
-## r is a language, so there is a syntax or set of rules for the language
-## need to intoduce classes of data/variables: numeric, integer, factor, character AND class command
-## need to introduce types of data: variable, vector, dataframe; list and class command
-## explain factor vs character, discrete vs contiunous strings. df vs tibbles. 
-## what a df is: columns are variables and rows are observations
-## <- vs = in syntax
-## naming variables/objects
-## names()
-## how to trouble shoot in R
-## == as boolean and == with commands like filter and select
-## show them how to view, navigate Rstudio GUI
-
 #-------------------------#
 #### FUNDAMENTAL SYNTAX ####
 
@@ -51,8 +37,8 @@
 # If a hashtag is in front of a line of code, it will not run
 
 # R can function directly as a calculator. 
-# Try running the next line by placing your cursor anywhere on the line and pressing command-return
-## Note apple computers use a different command????
+# Try running the next line by placing your cursor anywhere on the line and pressing 
+#   command-return (if you have a mac) or control-enter (if you have a pc)
 2 + 3
 
 # An arrow is used to name objects. Run the code below in the console
@@ -61,17 +47,10 @@ my_object <- 2 + 4
 # To see what is in your named object, you can call it by typing it into to console
 my_object
 
-class(my_object)
-
 # In the above case, your object is simply a single value.
 # But objects can take many forms! Some common ones that we will use are vectors and dataframes
 # A vector is a string of numbers. You can make a vector by using the c() function to combine numbers into a vector
 c(1,3,6)
-
-a <- c(1,3,6) 
-
-b <- c("nina", "billy", "ella")
-
 
 # Notice that any time we open parentheses, we have to close them!
 
@@ -83,9 +62,6 @@ b <- c("nina", "billy", "ella")
 my_dataframe <- data.frame("columnA" = c(1,3,5), "letters" = c("A","B","A"))
 my_dataframe
 
-habitat<- data.frame("species" = c("skunk", "fox", "mouse"), "grass" = c(1, 40, 20), "shrub" = c(25, 15, 30))
-habitat
-
 # Note that we had to put the letters in quotes. 
 # R can't understand words or letters (i.e. "characters") without quotes.
 # Try running each of the next two lines of code. Which one gives you an error message?
@@ -94,7 +70,6 @@ Hello world
 
 # Another important symbol is $. The $ symbol can be used to isolate a column of a dataframe
 my_dataframe$columnA
-## typo
 
 # Let's use the $ symbol to make a new column in our dataframe that doubles the values in column.A
 my_dataframe$newcolumn <- my_dataframe$columnA * 2
@@ -104,14 +79,15 @@ my_dataframe
 # dataframes take the form of [rows,columns]
 my_dataframe[1,]
 my_dataframe[1,2]
-my_dataframe[,c(1,3)] # we can use our c() command to isolate just columns 1 and 3
+my_dataframe[,c(1,3)] # we can use our c() function to isolate just columns 1 and 3
 my_dataframe[,2:3] # or we can use the ":" to pull out all the values from column 2 to 3
 
 # *Your turn!* Name the 2nd and 3rd rows of the dataframe as my_dataframe_2. We will use
 #   this object in a moment to look at the dataframe structure
 
+my_dataframe_2 <- my_dataframe[2:3,]
+my_dataframe_2
 # We can check out the class and structure of our objects by using the class and str functions
-## define data classes sooner
 class(my_object)
 str(my_object)
 class(my_vector)
@@ -123,7 +99,6 @@ str(my_dataframe_2)
 
 # Some final syntax tricks!
 # "==" means "is equal to" and "!=" means "is not equal to"
-## explain these as operators, and when they are syntax
 # We will come back to these commands later when we are working on data manipulation
 # For now, let's just ask if our value my_object is equal to a specific number
 # Which command says that it is false?
@@ -136,6 +111,7 @@ my_object == 5
 
 #install.packages("palmerpenguins")
 library(palmerpenguins)
+library(tidyverse)
 
 # We will use the penguins dataset from package "palmerpenguins" to practice exploring data
 # Let's first see what class our data are
@@ -150,7 +126,6 @@ class(penguins)
 # To fully work with tibbles, we need to install the tidyverse package
 
 #install.packages("tidyverse", dependencies = TRUE)
-
 library(tidyverse)
 # Loading library "tidyverse" will load the core packages in the tidyverse
 # Some of these packages are:
@@ -195,7 +170,6 @@ ncol(penguins)
 # Another trick you can use if you need to reference the full dataset repeatedly is 
 #   the "view" function
 # view will open a new file with your data in it that you can easily scroll through
-## show other way to view
 view(penguins)
 
 # We also may be interested in the distribution of partiular variables 
@@ -227,7 +201,6 @@ hist(penguins$flipper_length_mm)
 
 # What if we want to sort our data by a variable?
 # In this case, we'll sort our data by increasing bill depth
-## arrange keeps all the rows together, this overcomes potential problems we run into with excel
 arrange(penguins, bill_depth_mm)
 
 # Or, we can use a "-" to sort in decreasing order
@@ -290,13 +263,23 @@ gentoo_only <- filter(penguins, species=="Gentoo")
 #     In the above line of code, it is "Gentoo")
 # You may also want to change the assigned name of the tibble, since "gentoo_only" will
 #   no longer represent the data in your new filtered tibble
-
-female_only <- filter(penguins, sex=="female")
+biscoe_only <- filter(penguins, island=="Biscoe")
+dream <- filter(penguins, island == "Dream")
+tr<- filter(penguins, island == "Torgersen")
+male <-filter(penguins, sex == "male")
+female <- filter(penguins, sex == "female")
 
 #** QUESTION 1: Create a histogram of flipper length for the new dataset and paste it into 
-#   your assingment. About how many individuals had 210-215mm long flippers?
-hist(female_only$flipper_length_mm)
-## 20. Just checking you want them to visually add this?
+#   your assingment. Based on what you can see just by looking at the historgram,
+#     about how many individuals had 210-215mm long flippers? Estimate from the figure.
+
+hist(biscoe_only$flipper_length_mm)
+hist(dream$flipper_length_mm)
+hist(tr$flipper_length_mm)
+hist(male$flipper_length_mm)
+hist(biscoe_only$flipper_length_mm)
+hist(female$flipper_length_mm)
+hist(penguins$flipper_length_mm)
 
 # Save the histogram by clicking "Export" --> "Save as image" in the Plots quadrat of Rstudio
 # You will need this image to insert into your lab write-up
@@ -316,9 +299,14 @@ table(penguins$species,penguins$year)
 
 # *Your turn!* Use the table function to figure out how many observations of each penguin
 #     species we have per island
+
 table(penguins$species, penguins$island)
+filter(penguins, island == "Dream") %>% select(penguins, species == "Adelie")
+table(penguins$body_mass_g)
+
 #** QUESTION 2: Using the table function, how many penguin species were found 
 #     on more than one island?
+table(penguins$species, penguins$island)
 
 # table is a great tool, but it is limited to counting the frequency of occurrences
 # We may want to extract other kinds of information from our data!
@@ -328,36 +316,49 @@ table(penguins$species, penguins$island)
 # What if we want to know summary information about our data?
 # There are a number of built in summary commands we can use, like mean, sd (for standard
 #   deviation), max, min, or n (for frequency)
+# Let's start by taking the mean of bill depths across our whole dataset
+#   We can name the resulting variable "mean_bill_depth" so we remember what the 
+#   value represents
 summarize(penguins, mean_bill_depth = mean(bill_depth_mm))
-## explain that mean_bill_depth is a new "column"?
 
 # We can also use summarize to look at summary info by a factor
-## explain factor here? its explained early. in my explanation, factors have levels, characters don't. 
-str(penguins)
+# Remember, a factor is a categorical variable in your dataframe
 # To do this, we have to group our data by a factor
 # Here, we are grouping our data by species
 summarize(group_by(penguins, species), mean_bill_depth = mean(bill_depth_mm))
 
 # We can make a new tibble with multiple summary columns if we want to save our summary info
-summarize(group_by(penguins,year), 
+penguin_year_summary <- summarize(group_by(penguins,year), 
           count = n(),
           mean_bill_depth = mean(bill_depth_mm),
           sd_bill_depth = sd(bill_depth_mm),
           max_bill_depth = max(bill_depth_mm),
-          min_bill_depth = min(bill_depth_mm)) -> penguin_year_summary
+          min_bill_depth = min(bill_depth_mm))
 penguin_year_summary
-## different order of assigned object, is that confusing?
+#base r
+penguins[,2:3]
+#tidyverse
+select(penguins, island, bill_length_mm)
 
 # *Your turn!* Summarize our penguin dataset, grouped by island, and calculate the mean and 
 #   standard deviation of body mass
 
-island_summary <- summarize(group_by(penguins, island),
-          count = n(),
-          mean_mass = mean(body_mass_g),
-          sd_mass = sd(body_mass_g))
-island_summary
+penguin_island_summary<- summarize(group_by(penguins, island),
+                                   count = n(),
+                                  mean_body_mass = mean(body_mass_g),
+                                   sd_bodymass = sd(body_mass_g))
+penguin_island_summary
 #** QUESTION 3: On which island is penguin body mass the largest on average? What about 
 #   standard deviation? What is the mean and standard deviation of body mass on Dream Island?
+
+#--------------#
+#### QUESTIONS FROM LECTURE AND READINGS ####
+
+#** QUESTION 4: What kind of home range estimator is best for capturing migration paths? Why?
+
+#** QUESTION 5: If you wanted to understand how a red fox selected habitat in its home range,
+#   which of Johnson's orders of selection would you be evaluating? Over what temporal scale
+#   would you likely evaluate this pattern?
 
 #--------------#
 #### CONGRATS! ####

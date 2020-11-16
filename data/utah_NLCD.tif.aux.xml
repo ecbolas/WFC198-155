@@ -1,0 +1,22 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <CategoryNames>
+      <Category></Category>
+      <Category>Open Water</Category>
+      <Category>Developed, Open Space</Category>
+      <Category>Developed, Low Intensity</Category>
+      <Category>Developed, Medium Intensity</Category>
+      <Category>Developed, High Intensity</Category>
+      <Category>Barren Land</Category>
+      <Category>Deciduous Forest</Category>
+      <Category>Evergreen Forest</Category>
+      <Category>Mixed Forest</Category>
+      <Category>Shrub/Scrub</Category>
+      <Category>Herbaceuous</Category>
+      <Category>Hay/Pasture</Category>
+      <Category>Cultivated Crops</Category>
+      <Category>Woody Wetlands</Category>
+      <Category>Emergent Herbaceuous Wetlands</Category>
+    </CategoryNames>
+  </PAMRasterBand>
+</PAMDataset>

@@ -17,18 +17,9 @@
 library(tidyverse)
 
 # Later, we'll also need this color package, so let's install it now
-install.packages("RColorBrewer",dependencies=T)
-##find.package("RColorBrewer")
-# Ok, let's get to piping!
+#install.packages("RColorBrewer",dependencies=T)
 
-## how to read a plot and the differences between plots. dependent vs independent. x axis vs y. why is time always on the x axis. then put up examples of scatter is individual observations, box shows mdeian and quantiles, and bar plots are summaries. 
-## if time/interest talk about color palettes- temperature is divergent color palett. if increases then use continuous. different individuals = discrete color pallete. the way we use color isn't random, it conveys meaning. 
-## zoom in plot window
-## continuous and categorical variables
-## ggplot cheat sheet
-## reminder of == as boolean and == w/ filter
-## double-check when object<- commands vs commands -> object
-## clarify factor vs. variable
+# Ok, let's get to piping!
 
 #--------------#
 #### PIPING ####
@@ -42,6 +33,9 @@ install.packages("RColorBrewer",dependencies=T)
 
 # For example, let's use our penguin dataset again, with no NAs
 library(palmerpenguins)
+view(penguins)
+filter(penguins, island == "Biscoe")
+
 penguins <- drop_na(penguins)
 
 # What if we want to filter by year == 2007 and select only the first three columns?
@@ -57,10 +51,14 @@ penguins_select
 # We can! With a pipe
 # The 'pipe operator' is the magic link that ties your pipe together: %>% 
 # You can use this operator to combine multiple functions into a pipe
+# When piping, it's best practice to start with the original tibble, then assign
+#   the name of the new tibble at the end with the "->" operator rather than put the name
+#   at the beginning. That makes the command flow like a sentence: "Take the tibble 'penguins',
+#     filter it by 'year', select columns 1 through 3, and name it 'penguins_select'."
 # We start with our tibble, followed by the pipe operator:
 penguins %>% 
   filter(year==2007) %>%    # Then we can filter it by year, followed by the pipe operator
-  select(1:3) -> penguins_select    # And finally we select rows 1-3, and save the new tibble
+  select(1:3) -> penguins_select     # And finally we select rows 1-3, and save the new tibble
 
 # Did we get the same result? Compare the data values and dimensions (number of rows, columns)
 penguins_select
@@ -73,10 +71,8 @@ penguins_select
 # Below, write a pipe that selects the columns 'species', 'body_mass_g', and 'year', then
 #   arrange it by 'body_mass_g' from largest to smallest.
 # Name this new tibble: penguin_body_mass
-# HINT: as above, in piping it's best practice to start with the original tibble, then assign
-#   the name of the new tibble at the end with the "->" operator
 
-penguin_body_mass<- penguins %>% 
+penguin_body_mass <- penguins %>% 
   select(c(species, body_mass_g, year)) %>% 
   arrange(-body_mass_g)
 
@@ -96,7 +92,6 @@ penguin_body_mass
 #       (e.g. body length - bill length)
 #   3. You want a new variable based on a conditional statement
 #       (e.g. if body mass is grater than 4000, write "large", otherwise write "small")
-## greater
 # Can you think of other reasons?
 
 # The 'mutate' function is used to add a column to a tibble
@@ -152,28 +147,22 @@ view(penguins_4)
 #       (HINT: use the 'ifelse' function)
 # 4. name the final tibble 'my_penguin_tibble'
 
-penguins %>% 
+# We will use this new tibble to explore data visualization
+names(penguins)
+view(penguins)
+str(penguins)
+
+penguins %>% filter(year == "2007")
+
+my_penguin_tibble <- penguins %>% 
   filter(island == "Biscoe") %>% 
   select(c(1:4, 7:8)) %>% 
-  mutate(bill_length_binary = ifelse(bill_length_mm > 45, "long", "short")) -> penguin_tibble
+  mutate(bill_length_binary = ifelse(bill_length_mm > 45, "long", "short"))
 
-penguin_tibble
-
-
-
-
-# We will use this new tibble to explore data visualization
-#JUSTINE DELETE THIS BEFORE SENDING
-penguins %>% 
-  filter(island=="Biscoe") %>% 
-  select(c(1:4,7,8)) %>% 
-  mutate(bill_length_binary = ifelse(bill_length_mm > 45, "long","short")) -> my_penguin_tibble
-
+my_penguin_tibble
 
 #--------------------------#
 #### DATA VISUALIZATION ####
-##
-library(RColorBrewer)
 
 # We will primarily use 'ggplot' (in the tidyverse) to make vizualizations
 # ggplot allows for easy customization of plots by adding individual commands (like pipes)
@@ -219,9 +208,6 @@ ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, colo
 # Do we see a different pattern emerge?
 
 # *Your turn!* Add a trendline to the above plot.
-ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) + 
-  geom_point() +
-  geom_smooth(method = 'lm')
 #** QUESTION 2: Describe the relationship between bill depth and bill length for each 
 #   penguin species in your plot. Do these trends indicate a different relationship between
 #   bill length and bill depth than our trend that used all the data together?
@@ -229,18 +215,16 @@ ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, colo
 # As in lab 1, save the plot by clicking "Export" in the Plots quadrat of Rstudio
 # You will need this image to insert into your lab write-up
 
-# In addition to color, we can also distinguish a factor by size...
-## note that earlier, variable is used, now "factor" is used
+# In addition to color, we can also distinguish a variable by size...
 ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, size = species)) + 
   geom_point()
-## talk about warning message
 # ...or shape...
 ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, shape = sex)) + 
   geom_point()
 # ...or transparency (called 'alpha')....
 ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, alpha = year)) + 
   geom_point()
-# ...or multiple features (for multiple factors in your data)!
+# ...or multiple features (for multiple variables in your data)!
 ggplot(data = my_penguin_tibble, aes(x = bill_length_mm, y = bill_depth_mm, color = species,
   shape = sex)) + 
   geom_point()
@@ -258,21 +242,21 @@ ggplot(data = my_penguin_tibble,aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_wrap(~ species + sex)
 
 # *Your turn!* Let's bring our original 'penguins' tibble back in
-# Make a figure with your 'penguins' dataset that:
+# Use the same dependent variable (bill depth) and independent variable (bill length) to
+#     make a figure with your 'penguins' dataset that:
 #   1. shows different colors for males and females
-#   2. shows different shapes for sex
+#   2. shows different shapes for species
 #   3. has different panels for each island
-## same X and y ????
-## typo with sex/species?
 
-ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = sex, shape = sex)) +
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = sex, shape = species)) +
   geom_point() +
   facet_wrap(~island)
 
-
-#** QUESTION 3: On Dream Island, is there a difference in the range of bill depths between
-#   Adelie and Chinstrap penguins? If so, which penguin tends to have greater bill depth?
-#   What about bill length? If so, which penguin tends to have greater bill length?
+#** QUESTION 3: ####
+# Based on looking at the figure you made, on Dream Island, is there a 
+#   difference in the range of bill depths between Adelie and Chinstrap penguins? If so, 
+#   which penguin tends to have greater bill depth? What about bill length? If so, which
+#   penguin tends to have greater bill length?
 
 # Export your plot for your lab write-up.
 
@@ -316,8 +300,8 @@ penguins %>%
 # As above, we'll use 'fill' to differentite the species by color
 # We can also add error bars using geom_errorbar to show one standard deviation above and
 #   below each mean
-
-## clarify stat = "identity", position = "dodge"
+# We need to add the specification stat = "identity" so that the bar plot shows the value
+#   of our variable of interest
 ggplot(data = penguin_mass_summary,aes(x = species, y = mean_body_mass, fill = species)) + 
   geom_bar(stat = "identity") +
   geom_errorbar(aes(ymin = mean_body_mass - sd_body_mass, ymax = mean_body_mass + sd_body_mass),
@@ -333,13 +317,15 @@ penguins %>%
   group_by(sex,species) %>% 
   summarize(mean_body_mass = mean(body_mass_g),
             sd_body_mass = sd(body_mass_g)) -> penguin_mass_sex
+
+# We'll add position = "dodge" so that the bars show up next to each other
 ggplot(data = penguin_mass_sex,aes(x = species, y = mean_body_mass, fill = sex)) + 
   geom_bar(stat = "identity", position = "dodge") +
   geom_errorbar(aes(ymin = mean_body_mass - sd_body_mass, ymax = mean_body_mass + sd_body_mass),
                 position = "dodge")
 
-#** QUESTION 4: Which species seems to have the least sexual dimorphism in body mass?
-## maybe define sexual dimorphism?
+#** QUESTION 4: Which species seems to have the least sexual dimorphism (differences
+#   between males and females) in body mass?
 
 #--------------#
 #### USING COLOR IN DATA VISUALIZATION ####
@@ -363,7 +349,6 @@ display.brewer.all()
 # Note the names of the colors along the left. We'll be using these names in the following
 #   exercises. You can always use the display.brewer.all() command again if you need a 
 #   reminder about the color palette names.
-## maybe want to include the different scale() calls for adding colors to different types of data
 
 # First, let's plot categorical/qualitative data
 #  For these kind of data, we want to use colors that are unrelated
@@ -377,17 +362,16 @@ ggplot(data = penguins, aes(x = body_mass_g, y = flipper_length_mm, color = spec
 # What if you used a sequential color palette for the same data?
 ggplot(data = penguins, aes(x = body_mass_g, y = flipper_length_mm, color = species)) + 
   geom_point() +
-  scale_color_brewer(palette = "Blues")
+  scale_color_brewer(palette = "OrRd")
 
 # Sure, we can see the colors for the different species, but the color scheme implies that
 #   the species represent a gradient of some kind. That's not what we intended to show.
 
-ggplot(data = penguins, aes(x = body_mass_g, y = flipper_length_mm, color = body_mass_g)) + 
-  geom_point() +
-  scale_color_brewer(palette = "OrRd")
-
 # However, sequential color schemes are great for showing continuous data
 # Let's see how bill length predicts flipper length:
+#   (Note that the way we assign colors is a little different for continuous data. Instead
+#    of using scale_color_brewer, we use scale_color_gradientn and we have to assign how
+#    many breaks there are in the continuous color scheme.)
 ggplot(data = penguins) + 
   geom_point(aes(x = bill_length_mm, y = flipper_length_mm, color = body_mass_g)) +
   scale_color_gradientn(colors = brewer.pal(n = 8, name = "OrRd"))
@@ -424,21 +408,37 @@ ggplot(data = penguins_4) +
 #   2. Color by bill depth
 # For both figures, specify an appropriate color palette from RColorBrewer. Please use
 #    palettes that we haven't used in this lesson (find the names using display.brewer.all())
-#** QUESTION 5: Describe what the colors tell you about the relationship between body mass
-#   and bill depth for each of your two plots.
 
-adelie<- filter(penguins, species == "Adelie")
-ggplot(data = adelie, aes(x = body_mass_g, y = bill_depth_mm, color = island)) +
+# The palettes in the top group are sequential, the middle group are qualitative, and
+#   the bottom group are diverging.
+
+adelie_tib<- penguins %>% filter(species == "Adelie")
+names(adelie_tib)
+display.brewer.all()
+
+# use a color pallete that is qualitative (middle group) bc island is factor/categorical data
+ggplot(data = adelie_tib, aes(x = body_mass_g, y = bill_depth_mm, color = island)) +
   geom_point() +
-  scale_color_brewer(palette = "RdYlBu")
+  scale_color_brewer(palette = "Dark2")
 
-ggplot(data = adelie, aes(x = body_mass_g, y = bill_depth_mm, color = bill_depth_mm)) +
+# use a color pallete that is sequential (top group) bc bill_depth is continuous
+ggplot(data = adelie_tib, aes(x = body_mass_g, y = bill_depth_mm, color = bill_depth_mm)) +
   geom_point() +
   scale_color_gradientn(colors = brewer.pal(n = 6, name = "PuBuGn"))
 
-display.brewer.all()
-
+####** QUESTION 5: ####
+#Describe what the colors tell you about the relationship between body mass
+#   and bill depth for each of your two plots.
 # Export your plots for your lab write-up.
+
+#--------------#
+#### QUESTIONS FROM LECTURE AND READINGS ####
+
+#** QUESTION 6: How can the scale of the sampling of available points affect the results 
+#               of a habitat selection analysis?
+
+#** QUESTION 7: According to the marginal value theorem, when should an animal leave a 
+#               foraging patch?
 
 #--------------#
 #### CONGRATS! ####
